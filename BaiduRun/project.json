@@ -1,0 +1,26 @@
+{
+    "project_type":"javascript",
+    "debugMode":0,
+    "showFPS":true,
+    "frameRate":60,
+    "id":"gameCanvas",
+    "renderMode":0,
+    "engineDir":"frameworks/cocos2d-html5",
+    "modules":[
+        "cocos2d"
+    ],
+    "jsList":[
+        "src/resource.js",
+        "src/global.js",
+        "src/ui.js",
+        "src/loadingScene.js",
+        "src/startScene.js",
+        "src/IntroduceLayer.js",
+        "src/mainScene.js",
+        "src/GamePassLayer.js",
+        "src/GameOverLayer.js",
+        "src/InfoLayer.js",
+        "src/playScene.js",
+        "src/ShareLayer.js"
+    ]
+}

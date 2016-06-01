@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Baidu 15 Run</title>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="full-screen" content="yes"/>
+    <meta name="screen-orientation" content="portrait"/>
+    <meta name="x5-fullscreen" content="true"/>
+    <meta name="360-fullscreen" content="true"/>
+    <style>
+        html{width:100%;height:100%;}
+        body, canvas, div {
+            -moz-user-select: none;
+            -webkit-user-select: none;
+            -ms-user-select: none;
+            -khtml-user-select: none;
+            -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+        }
+    </style>
+</head>
+<body style="padding:0; margin: 0; background: #000;">
+<canvas id="gameCanvas" width="800" height="450"></canvas>
+<audio id="bgMusic" src="res/bgmusic.mp3" loop="loop" autoplay="autoplay" style="position: fixed;width:0;height: 0;left: 0;top: 0;background: black"></audio>
+<script src="WeixinApi.js"></script>
+<script>
+if (window.localStorage.getItem("NOWPASS")) {
+    var GAMEOPTIONS = {
+        NOWPASS: +window.localStorage.getItem("NOWPASS"),
+        REPLAY: false,
+        TOTALSUM: 2000
+    }
+}else {
+    var GAMEOPTIONS = {
+        NOWPASS: 1,
+        REPLAY: false,
+        TOTALSUM: 2000
+    }
+}
+var $bgMusic = document.getElementById("bgMusic");
+$bgMusic.loop = true;
+$bgMusic.onload = function(){
+    $bgMusic.play();
+    document.removeEventListener('touchstart', playSound, false);
+}
+$bgMusic.load();
+var playSound = function(){
+    $bgMusic.load();
+    try{$bgMusic.play();}catch(e){}
+}
+document.addEventListener('touchstart', playSound, false);
+var xhr = new XMLHttpRequest();
+xhr.open("GET", "/total", true);
+xhr.onreadystatechange = function(e){
+    if (xhr.readyState == 4 && xhr.status === 200) {  
+        GAMEOPTIONS.TOTALSUM = xhr.responseText;
+    }
+}
+xhr.send();
+WeixinApi.ready(function(api){
+    api.hideToolbar();
+    var wxData = {
+        "appId": "",
+        "imgUrl" : 'http://baidu15run.duapp.com/res/slogo.jpg',
+        "link" : 'http://baidu15run.duapp.com',
+        "desc" : '',
+        "title" : "Baidu 15 Run"
+    };
+    var wxCallbacks = {
+        favorite : false,
+        async: true,
+        ready : function() {
+            this.dataLoaded({
+                desc: '我是第'+ GAMEOPTIONS.TOTALSUM +'位Baidu 15 Run闯关挑战者，已通过了'+ ((GAMEOPTIONS.NOWPASS-1)*100/7).toFixed(0) +'%的关卡。你也来玩吧！'
+            });
+        },
+        cancel : function(resp) {
+        },
+        fail : function(resp) {
+        },
+        confirm : function(resp) {
+        },
+        all : function(resp,shareTo) {
+        }
+    };
+    api.shareToFriend(wxData, wxCallbacks);
+    api.shareToTimeline(wxData, wxCallbacks);
+    api.shareToWeibo(wxData, wxCallbacks);
+    api.generalShare(wxData, wxCallbacks);
+})
+setTimeout(function(){
+    document.body.style.width = "100%";
+}, 1000);
+</script>
+
+<script src="game.min.js"></script>
+<script>
+// var _bd=(("https:"==document.location.protocol)?"https://":"http://");
+// document.write(unescape('%3Cscript%20src%3D%22'+_bd+'hm.baidu.com/hm.js?35c9558ed08d45ac9075aba024b44b81'+'%22%20type%3D%22text/javascript%22%3E%3C/script%3E'));
+</script>
+</body>
+</html>
